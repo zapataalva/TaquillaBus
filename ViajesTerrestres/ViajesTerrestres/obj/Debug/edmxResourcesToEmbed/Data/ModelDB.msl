@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BDViajesTerrestresModelStoreContainer" CdmEntityContainer="BDViajesTerrestresEntities">
+    <EntitySetMapping Name="Bus">
+      <EntityTypeMapping TypeName="BDViajesTerrestresModel.Bus">
+        <MappingFragment StoreEntitySet="Bus">
+          <ScalarProperty Name="BusId" ColumnName="BusId" />
+          <ScalarProperty Name="Placa" ColumnName="Placa" />
+          <ScalarProperty Name="Capacidad" ColumnName="Capacidad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Conductor">
+      <EntityTypeMapping TypeName="BDViajesTerrestresModel.Conductor">
+        <MappingFragment StoreEntitySet="Conductor">
+          <ScalarProperty Name="ConductorId" ColumnName="ConductorId" />
+          <ScalarProperty Name="BusRefId" ColumnName="BusRefId" />
+          <ScalarProperty Name="NombreConductor" ColumnName="NombreConductor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Escala">
+      <EntityTypeMapping TypeName="BDViajesTerrestresModel.Escala">
+        <MappingFragment StoreEntitySet="Escala">
+          <ScalarProperty Name="EscalaId" ColumnName="EscalaId" />
+          <ScalarProperty Name="RutaRefId" ColumnName="RutaRefId" />
+          <ScalarProperty Name="ParadaEscala" ColumnName="ParadaEscala" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Municipio">
+      <EntityTypeMapping TypeName="BDViajesTerrestresModel.Municipio">
+        <MappingFragment StoreEntitySet="Municipio">
+          <ScalarProperty Name="MunicipioId" ColumnName="MunicipioId" />
+          <ScalarProperty Name="NombreMunicipio" ColumnName="NombreMunicipio" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pasajero">
+      <EntityTypeMapping TypeName="BDViajesTerrestresModel.Pasajero">
+        <MappingFragment StoreEntitySet="Pasajero">
+          <ScalarProperty Name="PasajeroId" ColumnName="PasajeroId" />
+          <ScalarProperty Name="NombrePasajero" ColumnName="NombrePasajero" />
+          <ScalarProperty Name="Tapabocas" ColumnName="Tapabocas" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ruta">
+      <EntityTypeMapping TypeName="BDViajesTerrestresModel.Ruta">
+        <MappingFragment StoreEntitySet="Ruta">
+          <ScalarProperty Name="RutaId" ColumnName="RutaId" />
+          <ScalarProperty Name="MunicipioOrigenId" ColumnName="MunicipioOrigenId" />
+          <ScalarProperty Name="MunicipioDestinoId" ColumnName="MunicipioDestinoId" />
+          <ScalarProperty Name="BusRefId" ColumnName="BusRefId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ticket">
+      <EntityTypeMapping TypeName="BDViajesTerrestresModel.Ticket">
+        <MappingFragment StoreEntitySet="Ticket">
+          <ScalarProperty Name="TicketId" ColumnName="TicketId" />
+          <ScalarProperty Name="PasajeroRefId" ColumnName="PasajeroRefId" />
+          <ScalarProperty Name="RutaRefId" ColumnName="RutaRefId" />
+          <ScalarProperty Name="NumeroDeSilla" ColumnName="NumeroDeSilla" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

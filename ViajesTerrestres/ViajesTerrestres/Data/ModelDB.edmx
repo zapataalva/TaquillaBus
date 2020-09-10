@@ -1,0 +1,516 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BDViajesTerrestresModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bus">
+          <Key>
+            <PropertyRef Name="BusId" />
+          </Key>
+          <Property Name="BusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Placa" Type="varchar" MaxLength="6" />
+          <Property Name="Capacidad" Type="int" />
+        </EntityType>
+        <EntityType Name="Conductor">
+          <Key>
+            <PropertyRef Name="ConductorId" />
+          </Key>
+          <Property Name="ConductorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BusRefId" Type="int" />
+          <Property Name="NombreConductor" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Escala">
+          <Key>
+            <PropertyRef Name="EscalaId" />
+          </Key>
+          <Property Name="EscalaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RutaRefId" Type="int" />
+          <Property Name="ParadaEscala" Type="int" />
+        </EntityType>
+        <EntityType Name="Municipio">
+          <Key>
+            <PropertyRef Name="MunicipioId" />
+          </Key>
+          <Property Name="MunicipioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreMunicipio" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Pasajero">
+          <Key>
+            <PropertyRef Name="PasajeroId" />
+          </Key>
+          <Property Name="PasajeroId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombrePasajero" Type="varchar" MaxLength="30" />
+          <Property Name="Tapabocas" Type="bit" />
+        </EntityType>
+        <EntityType Name="Ruta">
+          <Key>
+            <PropertyRef Name="RutaId" />
+          </Key>
+          <Property Name="RutaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MunicipioOrigenId" Type="int" />
+          <Property Name="MunicipioDestinoId" Type="int" />
+          <Property Name="BusRefId" Type="int" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="TicketId" />
+          </Key>
+          <Property Name="TicketId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PasajeroRefId" Type="int" />
+          <Property Name="RutaRefId" Type="int" />
+          <Property Name="NumeroDeSilla" Type="int" />
+        </EntityType>
+        <Association Name="RelacionConductorBus">
+          <End Role="Bus" Type="Self.Bus" Multiplicity="0..1" />
+          <End Role="Conductor" Type="Self.Conductor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bus">
+              <PropertyRef Name="BusId" />
+            </Principal>
+            <Dependent Role="Conductor">
+              <PropertyRef Name="BusRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionEscalaRuta">
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="0..1" />
+          <End Role="Escala" Type="Self.Escala" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ruta">
+              <PropertyRef Name="RutaId" />
+            </Principal>
+            <Dependent Role="Escala">
+              <PropertyRef Name="RutaRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionRutaBus">
+          <End Role="Bus" Type="Self.Bus" Multiplicity="0..1" />
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bus">
+              <PropertyRef Name="BusId" />
+            </Principal>
+            <Dependent Role="Ruta">
+              <PropertyRef Name="BusRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionRutaMunicipioDestino">
+          <End Role="Municipio" Type="Self.Municipio" Multiplicity="0..1" />
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Municipio">
+              <PropertyRef Name="MunicipioId" />
+            </Principal>
+            <Dependent Role="Ruta">
+              <PropertyRef Name="MunicipioDestinoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionRutaMunicipioOrigen">
+          <End Role="Municipio" Type="Self.Municipio" Multiplicity="0..1" />
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Municipio">
+              <PropertyRef Name="MunicipioId" />
+            </Principal>
+            <Dependent Role="Ruta">
+              <PropertyRef Name="MunicipioOrigenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionTicketPasajero">
+          <End Role="Pasajero" Type="Self.Pasajero" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pasajero">
+              <PropertyRef Name="PasajeroId" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="PasajeroRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionTicketRuta">
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ruta">
+              <PropertyRef Name="RutaId" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="RutaRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDViajesTerrestresModelStoreContainer">
+          <EntitySet Name="Bus" EntityType="Self.Bus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Conductor" EntityType="Self.Conductor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Escala" EntityType="Self.Escala" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pasajero" EntityType="Self.Pasajero" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ruta" EntityType="Self.Ruta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="RelacionConductorBus" Association="Self.RelacionConductorBus">
+            <End Role="Bus" EntitySet="Bus" />
+            <End Role="Conductor" EntitySet="Conductor" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionEscalaRuta" Association="Self.RelacionEscalaRuta">
+            <End Role="Ruta" EntitySet="Ruta" />
+            <End Role="Escala" EntitySet="Escala" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionRutaBus" Association="Self.RelacionRutaBus">
+            <End Role="Bus" EntitySet="Bus" />
+            <End Role="Ruta" EntitySet="Ruta" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionRutaMunicipioDestino" Association="Self.RelacionRutaMunicipioDestino">
+            <End Role="Municipio" EntitySet="Municipio" />
+            <End Role="Ruta" EntitySet="Ruta" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionRutaMunicipioOrigen" Association="Self.RelacionRutaMunicipioOrigen">
+            <End Role="Municipio" EntitySet="Municipio" />
+            <End Role="Ruta" EntitySet="Ruta" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionTicketPasajero" Association="Self.RelacionTicketPasajero">
+            <End Role="Pasajero" EntitySet="Pasajero" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionTicketRuta" Association="Self.RelacionTicketRuta">
+            <End Role="Ruta" EntitySet="Ruta" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BDViajesTerrestresModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bus">
+          <Key>
+            <PropertyRef Name="BusId" />
+          </Key>
+          <Property Name="BusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Placa" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="Capacidad" Type="Int32" />
+          <NavigationProperty Name="Conductor" Relationship="Self.RelacionConductorBus" FromRole="Bus" ToRole="Conductor" />
+          <NavigationProperty Name="Ruta" Relationship="Self.RelacionRutaBus" FromRole="Bus" ToRole="Ruta" />
+        </EntityType>
+        <EntityType Name="Conductor">
+          <Key>
+            <PropertyRef Name="ConductorId" />
+          </Key>
+          <Property Name="ConductorId" Type="Int32" Nullable="false" />
+          <Property Name="BusRefId" Type="Int32" />
+          <Property Name="NombreConductor" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Bus" Relationship="Self.RelacionConductorBus" FromRole="Conductor" ToRole="Bus" />
+        </EntityType>
+        <EntityType Name="Escala">
+          <Key>
+            <PropertyRef Name="EscalaId" />
+          </Key>
+          <Property Name="EscalaId" Type="Int32" Nullable="false" />
+          <Property Name="RutaRefId" Type="Int32" />
+          <Property Name="ParadaEscala" Type="Int32" />
+          <NavigationProperty Name="Ruta" Relationship="Self.RelacionEscalaRuta" FromRole="Escala" ToRole="Ruta" />
+        </EntityType>
+        <EntityType Name="Municipio">
+          <Key>
+            <PropertyRef Name="MunicipioId" />
+          </Key>
+          <Property Name="MunicipioId" Type="Int32" Nullable="false" />
+          <Property Name="NombreMunicipio" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Ruta" Relationship="Self.RelacionRutaMunicipioDestino" FromRole="Municipio" ToRole="Ruta" />
+          <NavigationProperty Name="Ruta1" Relationship="Self.RelacionRutaMunicipioOrigen" FromRole="Municipio" ToRole="Ruta" />
+        </EntityType>
+        <EntityType Name="Pasajero">
+          <Key>
+            <PropertyRef Name="PasajeroId" />
+          </Key>
+          <Property Name="PasajeroId" Type="Int32" Nullable="false" />
+          <Property Name="NombrePasajero" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Tapabocas" Type="Boolean" />
+          <NavigationProperty Name="Ticket" Relationship="Self.RelacionTicketPasajero" FromRole="Pasajero" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Ruta">
+          <Key>
+            <PropertyRef Name="RutaId" />
+          </Key>
+          <Property Name="RutaId" Type="Int32" Nullable="false" />
+          <Property Name="MunicipioOrigenId" Type="Int32" />
+          <Property Name="MunicipioDestinoId" Type="Int32" />
+          <Property Name="BusRefId" Type="Int32" />
+          <NavigationProperty Name="Bus" Relationship="Self.RelacionRutaBus" FromRole="Ruta" ToRole="Bus" />
+          <NavigationProperty Name="Escala" Relationship="Self.RelacionEscalaRuta" FromRole="Ruta" ToRole="Escala" />
+          <NavigationProperty Name="Municipio" Relationship="Self.RelacionRutaMunicipioDestino" FromRole="Ruta" ToRole="Municipio" />
+          <NavigationProperty Name="Municipio1" Relationship="Self.RelacionRutaMunicipioOrigen" FromRole="Ruta" ToRole="Municipio" />
+          <NavigationProperty Name="Ticket" Relationship="Self.RelacionTicketRuta" FromRole="Ruta" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="TicketId" />
+          </Key>
+          <Property Name="TicketId" Type="Int32" Nullable="false" />
+          <Property Name="PasajeroRefId" Type="Int32" />
+          <Property Name="RutaRefId" Type="Int32" />
+          <Property Name="NumeroDeSilla" Type="Int32" />
+          <NavigationProperty Name="Pasajero" Relationship="Self.RelacionTicketPasajero" FromRole="Ticket" ToRole="Pasajero" />
+          <NavigationProperty Name="Ruta" Relationship="Self.RelacionTicketRuta" FromRole="Ticket" ToRole="Ruta" />
+        </EntityType>
+        <Association Name="RelacionConductorBus">
+          <End Role="Bus" Type="Self.Bus" Multiplicity="0..1" />
+          <End Role="Conductor" Type="Self.Conductor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bus">
+              <PropertyRef Name="BusId" />
+            </Principal>
+            <Dependent Role="Conductor">
+              <PropertyRef Name="BusRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionRutaBus">
+          <End Role="Bus" Type="Self.Bus" Multiplicity="0..1" />
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bus">
+              <PropertyRef Name="BusId" />
+            </Principal>
+            <Dependent Role="Ruta">
+              <PropertyRef Name="BusRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionEscalaRuta">
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="0..1" />
+          <End Role="Escala" Type="Self.Escala" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ruta">
+              <PropertyRef Name="RutaId" />
+            </Principal>
+            <Dependent Role="Escala">
+              <PropertyRef Name="RutaRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionRutaMunicipioDestino">
+          <End Role="Municipio" Type="Self.Municipio" Multiplicity="0..1" />
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Municipio">
+              <PropertyRef Name="MunicipioId" />
+            </Principal>
+            <Dependent Role="Ruta">
+              <PropertyRef Name="MunicipioDestinoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionRutaMunicipioOrigen">
+          <End Role="Municipio" Type="Self.Municipio" Multiplicity="0..1" />
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Municipio">
+              <PropertyRef Name="MunicipioId" />
+            </Principal>
+            <Dependent Role="Ruta">
+              <PropertyRef Name="MunicipioOrigenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionTicketPasajero">
+          <End Role="Pasajero" Type="Self.Pasajero" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pasajero">
+              <PropertyRef Name="PasajeroId" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="PasajeroRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelacionTicketRuta">
+          <End Role="Ruta" Type="Self.Ruta" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ruta">
+              <PropertyRef Name="RutaId" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="RutaRefId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDViajesTerrestresEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bus" EntityType="Self.Bus" />
+          <EntitySet Name="Conductor" EntityType="Self.Conductor" />
+          <EntitySet Name="Escala" EntityType="Self.Escala" />
+          <EntitySet Name="Municipio" EntityType="Self.Municipio" />
+          <EntitySet Name="Pasajero" EntityType="Self.Pasajero" />
+          <EntitySet Name="Ruta" EntityType="Self.Ruta" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" />
+          <AssociationSet Name="RelacionConductorBus" Association="Self.RelacionConductorBus">
+            <End Role="Bus" EntitySet="Bus" />
+            <End Role="Conductor" EntitySet="Conductor" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionRutaBus" Association="Self.RelacionRutaBus">
+            <End Role="Bus" EntitySet="Bus" />
+            <End Role="Ruta" EntitySet="Ruta" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionEscalaRuta" Association="Self.RelacionEscalaRuta">
+            <End Role="Ruta" EntitySet="Ruta" />
+            <End Role="Escala" EntitySet="Escala" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionRutaMunicipioDestino" Association="Self.RelacionRutaMunicipioDestino">
+            <End Role="Municipio" EntitySet="Municipio" />
+            <End Role="Ruta" EntitySet="Ruta" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionRutaMunicipioOrigen" Association="Self.RelacionRutaMunicipioOrigen">
+            <End Role="Municipio" EntitySet="Municipio" />
+            <End Role="Ruta" EntitySet="Ruta" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionTicketPasajero" Association="Self.RelacionTicketPasajero">
+            <End Role="Pasajero" EntitySet="Pasajero" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="RelacionTicketRuta" Association="Self.RelacionTicketRuta">
+            <End Role="Ruta" EntitySet="Ruta" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(BDViajesTerrestresModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(BDViajesTerrestresModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BDViajesTerrestresModelStoreContainer" CdmEntityContainer="BDViajesTerrestresEntities">
+          <EntitySetMapping Name="Bus">
+            <EntityTypeMapping TypeName="BDViajesTerrestresModel.Bus">
+              <MappingFragment StoreEntitySet="Bus">
+                <ScalarProperty Name="BusId" ColumnName="BusId" />
+                <ScalarProperty Name="Placa" ColumnName="Placa" />
+                <ScalarProperty Name="Capacidad" ColumnName="Capacidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conductor">
+            <EntityTypeMapping TypeName="BDViajesTerrestresModel.Conductor">
+              <MappingFragment StoreEntitySet="Conductor">
+                <ScalarProperty Name="ConductorId" ColumnName="ConductorId" />
+                <ScalarProperty Name="BusRefId" ColumnName="BusRefId" />
+                <ScalarProperty Name="NombreConductor" ColumnName="NombreConductor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Escala">
+            <EntityTypeMapping TypeName="BDViajesTerrestresModel.Escala">
+              <MappingFragment StoreEntitySet="Escala">
+                <ScalarProperty Name="EscalaId" ColumnName="EscalaId" />
+                <ScalarProperty Name="RutaRefId" ColumnName="RutaRefId" />
+                <ScalarProperty Name="ParadaEscala" ColumnName="ParadaEscala" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Municipio">
+            <EntityTypeMapping TypeName="BDViajesTerrestresModel.Municipio">
+              <MappingFragment StoreEntitySet="Municipio">
+                <ScalarProperty Name="MunicipioId" ColumnName="MunicipioId" />
+                <ScalarProperty Name="NombreMunicipio" ColumnName="NombreMunicipio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pasajero">
+            <EntityTypeMapping TypeName="BDViajesTerrestresModel.Pasajero">
+              <MappingFragment StoreEntitySet="Pasajero">
+                <ScalarProperty Name="PasajeroId" ColumnName="PasajeroId" />
+                <ScalarProperty Name="NombrePasajero" ColumnName="NombrePasajero" />
+                <ScalarProperty Name="Tapabocas" ColumnName="Tapabocas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ruta">
+            <EntityTypeMapping TypeName="BDViajesTerrestresModel.Ruta">
+              <MappingFragment StoreEntitySet="Ruta">
+                <ScalarProperty Name="RutaId" ColumnName="RutaId" />
+                <ScalarProperty Name="MunicipioOrigenId" ColumnName="MunicipioOrigenId" />
+                <ScalarProperty Name="MunicipioDestinoId" ColumnName="MunicipioDestinoId" />
+                <ScalarProperty Name="BusRefId" ColumnName="BusRefId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ticket">
+            <EntityTypeMapping TypeName="BDViajesTerrestresModel.Ticket">
+              <MappingFragment StoreEntitySet="Ticket">
+                <ScalarProperty Name="TicketId" ColumnName="TicketId" />
+                <ScalarProperty Name="PasajeroRefId" ColumnName="PasajeroRefId" />
+                <ScalarProperty Name="RutaRefId" ColumnName="RutaRefId" />
+                <ScalarProperty Name="NumeroDeSilla" ColumnName="NumeroDeSilla" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
